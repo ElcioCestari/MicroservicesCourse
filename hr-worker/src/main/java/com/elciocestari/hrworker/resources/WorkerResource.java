@@ -2,22 +2,27 @@ package com.elciocestari.hrworker.resources;
 
 import java.util.List;
 
-import javax.websocket.server.PathParam;
-
-import org.hibernate.boot.registry.classloading.spi.ClassLoaderService.Work;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.elciocestari.hrworker.entities.Worker;
 import com.elciocestari.hrworker.repositories.WorkerRepository;
+
 
 @RestController
 @RequestMapping("/workers")
 public class WorkerResource {
+	
+	private static Logger logger = LoggerFactory.getLogger(WorkerResource.class);
+	
+	@Autowired
+	private Environment environment;
 
 	@Autowired
 	private WorkerRepository repository;
@@ -26,15 +31,15 @@ public class WorkerResource {
 	public ResponseEntity<List<Worker>> findAll(){
 		List<Worker> workers = repository.findAll();
 		
-		return ResponseEntity.ok().body(workers);
-		
+		return ResponseEntity.ok().body(workers);		
 	}
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Worker> findById(@PathVariable Long id){
 		Worker worker = repository.findById(id).get();
 		
-		return ResponseEntity.ok().body(worker);
+		logger.info("PORT = "  + environment.getProperty("local.server.port"));
 		
+		return ResponseEntity.ok().body(worker);	
 	}
 }

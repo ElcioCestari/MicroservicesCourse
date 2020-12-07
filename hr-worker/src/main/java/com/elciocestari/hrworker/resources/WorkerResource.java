@@ -14,32 +14,38 @@ import org.springframework.web.bind.annotation.RestController;
 import com.elciocestari.hrworker.entities.Worker;
 import com.elciocestari.hrworker.repositories.WorkerRepository;
 
-
 @RestController
 @RequestMapping("/workers")
 public class WorkerResource {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(WorkerResource.class);
-	
+
 	@Autowired
 	private Environment environment;
 
 	@Autowired
 	private WorkerRepository repository;
-	
+
 	@GetMapping
-	public ResponseEntity<List<Worker>> findAll(){
+	public ResponseEntity<List<Worker>> findAll() {
 		List<Worker> workers = repository.findAll();
-		
-		return ResponseEntity.ok().body(workers);		
+
+		return ResponseEntity.ok().body(workers);
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Worker> findById(@PathVariable Long id){
+	public ResponseEntity<Worker> findById(@PathVariable Long id) {
+		/*
+		 * teste para verificar o comportamento do Hystrix
+		 * try { Thread.sleep(3000L); } catch (InterruptedException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); }
+		 * 
+		 */ 
+		
 		Worker worker = repository.findById(id).get();
-		
-		logger.info("PORT = "  + environment.getProperty("local.server.port"));
-		
-		return ResponseEntity.ok().body(worker);	
+
+		logger.info("PORT = " + environment.getProperty("local.server.port"));
+
+		return ResponseEntity.ok().body(worker);
 	}
 }

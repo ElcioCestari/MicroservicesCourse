@@ -24,19 +24,6 @@ public class Role implements Serializable {
 	private Long id;
 	private String roleName;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "tb_user_role", 
-			joinColumns = @JoinColumn(name = "role_id"), 
-			inverseJoinColumns = @JoinColumn(
-			name = "user_id")
-	)
-	
-	private Set<Role> roles = new HashSet<>();
-
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
 	public Long getId() {
 		return id;
 	}
